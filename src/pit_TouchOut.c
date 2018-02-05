@@ -1,45 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../inc/pit_ERROR.h"
 
 #define IN_RANGE(x,min,max) ((x)>=(min) &&  (x)<=(max))
+#define __unix
+int screenWidth = 0;
+int screenHeight = 0;
 
-void mouseDownAt(float percentX, float percentY){
-    int x = 0;
-    int y = 0;
+void initScreen();
+int* convert(float x, float y);
+
+void initScreen(){
+    #ifdef __unix
+    //getScreenWidth
+    screenWidth = 800;
+    //getScreenHeight
+    screenHeight = 600;
+    #else
+    //getScreenWidth
+    screenWidth = 800;
+    //getScreenHeight
+    screenHeight = 600;
+    #endif // __unix
+}
+
+int mouseDownAt(float percentX, float percentY){
+    int* point;
     if(IN_RANGE(percentX,0,1.0f) && IN_RANGE(percentY,0,1.0f)){
-        convert(&percentX, &percentY);
-        x = (int)percentX;
-        y = (int)percentY;
-        //generate mouseclick
+        point = convert(percentX, percentY);
+        //generate mousedown
         #ifdef __unix
-            printf("Mouse click @ %d , %d",x,y);
+        printf("Mouse down @ %d , %d\n",point[0],point[1]);
         #endif // __unix
+        return NO_ERROR;
     }else{
-        //throw error about off of screen
+        return ERR_OUT_OFF_BOUNDS;
     }
 }
 
-void mouseUpAt(float percentX, float percentY){}
+int mouseUpAt(float percentX, float percentY){
+    int* point;
+    if(IN_RANGE(percentX,0,1.0f) && IN_RANGE(percentY,0,1.0f)){
+        point = convert(percentX, percentY);
+        //generate mousedown
+        #ifdef __unix
+        printf("Mouse Up @ %d , %d\n",point[0],point[1]);
+        #endif // __unix
+        return NO_ERROR;
+    }else{
+        return ERR_OUT_OFF_BOUNDS;
+    }
+}
 
-void touchDownAt(float percentX, float percentY){
+int touchDownAt(float percentX, float percentY){
     /*if(IN_RANGE(percentX,0,1.0f) && IN_RANGE(percentY,0,1.0f)){
         printf("test2");
     }*/
+    return NOT_DEFINED_YET;
 }
 
 /**
 Converts percent of screen space into pixel coordantes.
 */
 
-void convert(float* x, float* y){
-    int w = 800;
-    int h = 600;
-
-    if(IN_RANGE(*x,0,1.0f) && IN_RANGE(*y,0,1.0f)){
-        //get sceen res
-        //calc pixel positions
-        *x = *x * w;
-        *y = *y * h;
+int* convert(float x, float y){
+    static int point[2] = {-1,-1};
+    if(screenWidth == 0){
+        initScreen();
     }
+    point[0] = (int)(x * screenWidth);
+    point[1] = (int)(y * screenHeight);
+    return point;
 }
-ssss

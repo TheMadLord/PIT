@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../inc/pit_TouchOut.h"
+#include "../inc/pit_ERROR.h"
 int main()
 {
     mouseClickAt(0.5f,0.5f);

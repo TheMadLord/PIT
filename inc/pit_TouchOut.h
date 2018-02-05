@@ -5,7 +5,7 @@ void mouseDownAt(float, float);
 void mouseUpAt(float, float);
 
 void mouseClickAt(float x, float y){
-    mouseDownAt(x,y); mouseUpAt(x,y);
+    mouseDownAt(x,y);/*wait?*/ mouseUpAt(x,y);
 }
 
 void touchDownAt(float percentX, float percentY);
