@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <X11/Xlib.h>
+#ifdef _WIN32
+    #include <windows.h>
+#endif // __windows
+//#include <X11/Xlib.h>
 
 #include "../inc/pit_ERROR.h"
 
@@ -38,18 +41,16 @@ int getRootWindowSize(int *w, int *h)
 
 void initScreen(){
     #ifdef __unix
-    //linux code goes here
-    //getScreenWidth
+    //linux code
     screenWidth = 800;
-    //getScreenHeight
-    screenHeight = 600;
-    #else
-    //windows code goes here
-    //getScreenWidth
-    screenWidth = 800;
-    //getScreenHeight
     screenHeight = 600;
     #endif // __unix
+    #ifdef _WIN32
+    //windows code
+    //windows uses relative screen space (0,0) = upper left, (65535,65535) = lower, right.
+    screenWidth = 65535;
+    screenHeight = 65535;
+    #endif
     onDebug(printf("Screen Set to %d x %d\n", screenWidth, screenHeight));
 }
 
@@ -61,10 +62,13 @@ int mouseDownAt(float percentX, float percentY){
         #ifdef __unix
             //linux code goes here
         #endif // __unix
-        #ifdef __windows
+        #ifdef _WIN32
             //windows code goes here
-        #endif // __windows
-        onDebug(printf("Mouse down @ %d %d \n",point[0],point[1]));
+            mouse_event(MOUSEEVENTF_MOVE|MOUSEEVENTF_ABSOLUTE,point[0],point[1],0,0);
+            mouse_event(MOUSEEVENTF_LEFTDOWN,0,0,0,0);
+        #endif // _WIN32
+        //MOUSEEVENTF_ABSOLUTE
+        onDebug(printf("Mouse down @ %d, %d \n",point[0],point[1]));
         free(point);
         return NO_ERROR;
     }else{
@@ -78,8 +82,14 @@ int mouseUpAt(float percentX, float percentY){
         point = convert(percentX, percentY);
         //generate mousedown
         #ifdef __unix
+            //linux code goes here
         #endif // __unix
-        onDebug(printf("Mouse Up @ %d , %d\n",point[0],point[1]));
+        #ifdef _WIN32
+            //windows code goes here
+            mouse_event(MOUSEEVENTF_MOVE|MOUSEEVENTF_ABSOLUTE,point[0],point[1],0,0);
+            mouse_event(MOUSEEVENTF_LEFTUP,0,0,0,0);
+        #endif // _WIN32
+        onDebug(printf("Mouse Up   @ %d, %d\n",point[0],point[1]));
         free(point);
         return NO_ERROR;
     }else{
@@ -95,7 +105,7 @@ int touchUpAt(){
 }
 
 /**
-Converts percent of screen space into pixel coordantes.
+Converts percent of screen space into pixel coordinate.
 */
 
 int* convert(float x, float y){

@@ -4,12 +4,12 @@
 #include "../inc/pit_ERROR.h"
 int main()
 {
-    mouseClickAt(0.5f,0.5f);
-    touchDownAt(0.1f,0.4f);
+    mouseClickAt(0.01f,.99f);
     //find awc
     //init awc
     //while true
         //get input from awc
-        //get inturpt input
+        //get intrupt input
         //generate mouse/touch ouput based on step.
+    return 0;
 }
