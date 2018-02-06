@@ -5,10 +5,11 @@ char* ErrorType(int error){
     switch(error){
         case NO_ERROR:
             type = "Not an Error"; break;
+        #ifdef isDebug
         case ERR_OUT_OFF_BOUNDS:
             type = "Out of Bounds Error"; break;
-        case NOT_DEFINED_YET:
-            type = "Function Not Defined Yet"; break;
+        #endif
+
         default:
             type = "Unkown Error"; break;
     }

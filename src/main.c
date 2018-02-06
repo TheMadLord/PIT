@@ -5,6 +5,7 @@
 int main()
 {
     mouseClickAt(0.5f,0.5f);
+    touchDownAt(0.1f,0.4f);
     //find awc
     //init awc
     //while true

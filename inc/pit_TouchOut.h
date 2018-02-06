@@ -1,12 +1,15 @@
 #ifndef PIT_TOUCHOUT_H_INCLUDED
 #define PIT_TOUCHOUT_H_INCLUDED
-void mouseDownAt(float, float);
+int mouseDownAt(float, float);
 
-void mouseUpAt(float, float);
+int mouseUpAt(float, float);
 
 void mouseClickAt(float x, float y){
     mouseDownAt(x,y);/*wait?*/ mouseUpAt(x,y);
 }
 
-void touchDownAt(float percentX, float percentY);
+int touchDownAt(float percentX, float percentY);
+
+int touchUpAt(float percentX, float percentY);
+
 #endif // PIT_TOUCHOUT_H_INCLUDED
